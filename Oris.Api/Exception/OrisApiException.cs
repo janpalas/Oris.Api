@@ -6,8 +6,10 @@ namespace Oris.Api
 	public class OrisApiException : Exception
 	{
 		public string OrisResponseStatus { get; }
-		public string Uri { get; }
+		public string Method { get; }
 		public HttpStatusCode? ResponseStatusCode { get; }
+
+		public string Uri { get; }
 
 		public OrisApiException(HttpStatusCode responseStatusCode, string uri)
 		{
@@ -15,10 +17,10 @@ namespace Oris.Api
 			Uri = uri;
 		}
 
-		public OrisApiException(string orisResponseStatus, string uri)
+		public OrisApiException(string orisResponseStatus, string orisApiMethod)
 		{
 			OrisResponseStatus = orisResponseStatus;
-			Uri = uri;
+			Method = orisApiMethod;
 		}
 	}
 }
