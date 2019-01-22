@@ -17,12 +17,13 @@ namespace Oris.Api.Tests
 			Assert.IsNotNull(clubs);
 			Assert.IsNotEmpty(clubs);
 
-			Club sjc = clubs.FirstOrDefault(x => x.Zkratka == "SJC");
+			Club sjc = clubs.FirstOrDefault(x => x.Abbreviation == "SJC");
 			Assert.IsNotNull(sjc);
 			Assert.AreEqual("145", sjc.Id);
-			Assert.AreEqual("Sportcentrum Jičín", sjc.Nazev);
+			Assert.AreEqual("Sportcentrum Jičín", sjc.Name);
 			Assert.AreEqual("Východočeská", sjc.Region);
-			Assert.AreEqual("0618", sjc.Cislo);
+			Assert.AreEqual("0618", sjc.Number);
+		}
 		}
 
 		class TestFixture

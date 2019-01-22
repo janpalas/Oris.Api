@@ -5,7 +5,7 @@ namespace Oris.Api
 {
 	public class Event
 	{
-		public string Id { get; set; }
+		public int Id { get; set; }
 		public string Name { get; set; }
 		public DateTime Date { get; set; }
 		public string Region { get; set; }
@@ -22,7 +22,7 @@ namespace Oris.Api
 		public string GpsLongitude { get; set; }
 
 		public string Place { get; set; }
-		public string Version { get; set; }
+		public int Version { get; set; }
 		public int ParentId { get; set; }
 		public string Status { get; set; }
 		public string OBPostupy { get; set; }

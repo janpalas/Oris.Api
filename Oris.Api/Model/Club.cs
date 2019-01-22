@@ -5,18 +5,18 @@ namespace Oris.Api
 	public class Club
 	{
 		[JsonProperty("ID")]
-		public string Id { get; set; }
+		public int Id { get; set; }
 
 		[JsonProperty("Name")]
-		public string Nazev { get; set; }
+		public string Name { get; set; }
 
 		[JsonProperty("Abbr")]
-		public string Zkratka { get; set; }
+		public string Abbreviation { get; set; }
 
 		[JsonProperty("Region")]
 		public string Region { get; set; }
 
 		[JsonProperty("Number")]
-		public string Cislo { get; set; }
+		public string Number { get; set; }
 	}
 }

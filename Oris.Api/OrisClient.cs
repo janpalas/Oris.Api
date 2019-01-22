@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -33,26 +34,61 @@ namespace Oris.Api
 
 		public async Task<IList<Event>> GetEventsAsync(EventFilter filter)
 		{
-			string json = await _orisWebClient.GetStringAsync($"{OrisApiUrl}&method=getEventList{GetUrlParamsFromEventFilter(filter)}");
+			if (filter == null)
+				throw new ArgumentNullException(nameof(filter));
+
+			string json = await _orisWebClient.GetStringAsync($"{OrisApiUrl}&method=getEventList{GetUrlParamsFromEventFilter()}");
 
 			OrisDataBatch<Event> orisDataBatch = JsonConvert.DeserializeObject<OrisDataBatch<Event>>(json);
 			orisDataBatch.EnsureSuccessfulResponse();
 
 			List<Event> events = orisDataBatch.Data.Select(x => x.Value).ToList();
 			return events;
+
+			string GetUrlParamsFromEventFilter()
+			{
+				string urlParams = $"&datefrom={filter.From:yyyy-MM-dd}&dateto={filter.To:yyyy-MM-dd}";
+
+				if (!string.IsNullOrEmpty(filter.MyClubId))
+					urlParams += $"&myClubId={filter.MyClubId}";
+
+				if (!string.IsNullOrEmpty(filter.Club))
+					urlParams += $"&club={filter.Club}";
+
+				return urlParams;
+			}
 		}
 
-		private string GetUrlParamsFromEventFilter(EventFilter filter)
+		public async Task<IList<EventEntry>> GetEventEntriesAsync(int eventId, EventEntriesFilter filter, string username = null, string password = null)
 		{
-			string urlParams = $"&datefrom={filter.From:yyyy-MM-dd}&dateto={filter.To:yyyy-MM-dd}";
+			string json = await _orisWebClient.GetStringAsync($"{OrisApiUrl}&method=getEventEntries&eventid={eventId}{GetUrlParamsFromEventEntriesFilter()}");
 
-			if (!string.IsNullOrEmpty(filter.MyClubId))
-				urlParams += $"&myClubId={filter.MyClubId}";
+			OrisDataBatch<EventEntry> orisDataBatch = JsonConvert.DeserializeObject<OrisDataBatch<EventEntry>>(json);
+			orisDataBatch.EnsureSuccessfulResponse();
 
-			if (!string.IsNullOrEmpty(filter.Club))
-				urlParams += $"&club={filter.Club}";
+			List<EventEntry> eventEntries = orisDataBatch.Data.Select(x => x.Value).ToList();
+			return eventEntries;
 
-			return urlParams;
+			string GetUrlParamsFromEventEntriesFilter()
+			{
+				string urlParams = string.Empty;
+
+				if (!string.IsNullOrEmpty(username))
+					urlParams += $"&username={username}";
+
+				if (!string.IsNullOrEmpty(password))
+					urlParams += $"&username={password}";
+
+				if (filter == null)
+					return urlParams;
+
+				if (!string.IsNullOrEmpty(filter.ClubId))
+					urlParams += $"&clubid={filter.ClubId}";
+
+				return urlParams;
+			}
 		}
+
+		
 	}
 }
